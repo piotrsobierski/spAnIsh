@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
-import db from "./config/database";
+import { AppDataSource } from "./config/database";
 import { router } from "./routes";
 
 dotenv.config();
@@ -27,22 +27,12 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });
 });
 
-async function testDatabaseConnection() {
-  let conn;
-  try {
-    conn = await db.getConnection();
+// Initialize database and start server
+AppDataSource.initialize()
+  .then(() => {
     console.log("Database connection successful");
-    return true;
-  } catch (err) {
-    console.error("Error connecting to the database:", err);
-    return false;
-  } finally {
-    if (conn) conn.release();
-  }
-}
-
-// Start server
-app.listen(port, async () => {
-  console.log(`Server is running on port ${port}`);
-  await testDatabaseConnection();
-});
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => console.error("Error connecting to the database:", error));

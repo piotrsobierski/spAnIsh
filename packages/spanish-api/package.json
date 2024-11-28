@@ -7,15 +7,24 @@
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "swagger-autogen": "ts-node swagger.ts"
+    "swagger-autogen": "ts-node swagger.ts",
+    "db:init": "ts-node src/scripts/db-init.ts",
+    "db:status": "ts-node src/scripts/db-status.ts",
+    "db:top10": "ts-node src/scripts/db-top10.ts",
+    "db:topX": "ts-node src/scripts/db-topX.ts",
+    "db:clear": "ts-node src/scripts/db-clear.ts",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/database.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d src/config/database.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/config/database.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "mariadb": "^3.2.3",
-    "swagger-ui-express": "^5.0.0",
-    "swagger-autogen": "^2.23.7"
+    "mysql2": "^3.11.4",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -26,4 +35,4 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
-} 
+}
