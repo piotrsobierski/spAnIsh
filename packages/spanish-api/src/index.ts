@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
-import { AppDataSource } from "./config/database";
+import AppDataSource from "./config/database";
 import { router } from "./routes";
+import { specs } from "./config/swagger";
 
 dotenv.config();
 
@@ -15,12 +16,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Swagger documentation
-const swaggerFile = require("../swagger-output.json");
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
-
 // Routes
 app.use("/api", router);
+
+// Swagger documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Health check endpoint
 app.get("/health", (req, res) => {
@@ -30,9 +30,11 @@ app.get("/health", (req, res) => {
 // Initialize database and start server
 AppDataSource.initialize()
   .then(() => {
-    console.log("Database connection successful");
+    console.log("Database connection initialized");
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   })
-  .catch((error) => console.error("Error connecting to the database:", error));
+  .catch((error: Error) =>
+    console.error("Error connecting to the database:", error)
+  );

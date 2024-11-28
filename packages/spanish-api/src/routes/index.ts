@@ -1,12 +1,10 @@
-import { Router } from 'express';
+import { Router } from "express";
+// import categoriesRouter from "./categories.routes";
+import wordsRouter from "./words.routes";
 
-export const router = Router();
+const router = Router();
 
-// Example route
-router.get('/example', (req, res) => {
-  /* 
-    #swagger.tags = ['Example']
-    #swagger.description = 'Example endpoint'
-  */
-  res.json({ message: 'Example endpoint' });
-}); 
+// router.use("/categories", categoriesRouter);
+router.use("/words", wordsRouter);
+
+export { router };
