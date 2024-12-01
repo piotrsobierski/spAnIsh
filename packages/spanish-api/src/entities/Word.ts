@@ -32,11 +32,17 @@ export class Word {
   @Column({ name: "good_answers", default: 0 })
   goodAnswers!: number;
 
+  @Column({ name: "good_answers_streak", default: 0 })
+  goodAnswersStreak!: number;
+
   @Column({ name: "bad_answers", default: 0 })
   badAnswers!: number;
 
   @Column({ name: "last_answer_time", nullable: true })
   lastAnswerTime!: Date;
+
+  @Column({ name: "is_skipped", default: false })
+  isSkipped!: boolean;
 
   @CreateDateColumn()
   createdAt!: Date;

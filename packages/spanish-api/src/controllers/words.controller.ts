@@ -54,7 +54,8 @@ export class WordsController {
       const words = await this.wordRepository.find({
         where: [
           { lastAnswerTime: IsNull() }, // Never answered
-          { goodAnswers: LessThan(3) }, // Less than 3 correct answers
+          { goodAnswersStreak: LessThan(3) }, // Less than 3 correct answers
+          { isSkipped: false }, // Skipped words
           {
             lastAnswerTime: LessThan(
               new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
@@ -105,8 +106,10 @@ export class WordsController {
       // Update answer counts
       if (isCorrect) {
         word.goodAnswers += 1;
+        word.goodAnswersStreak += 1;
       } else {
         word.badAnswers += 1;
+        word.goodAnswersStreak = 0;
       }
 
       word.lastAnswerTime = new Date();
@@ -115,6 +118,45 @@ export class WordsController {
       res.json(word);
     } catch (error) {
       res.status(500).json({ error: "Failed to save answer" });
+    }
+  }
+
+  /**
+   * @swagger
+   * /words/{wordId}/skip:
+   *   post:
+   *     summary: Skip a word
+   *     parameters:
+   *       - in: path
+   *         name: wordId
+   *         required: true
+   *         schema:
+   *           type: integer
+   *         description: ID of the word to skip
+   *     responses:
+   *       200:
+   *         description: Word skipped successfully
+   *       404:
+   *         description: Word not found
+   */
+  async skipWord(req: Request, res: Response) {
+    try {
+      const { wordId } = req.params;
+
+      const word = await this.wordRepository.findOne({
+        where: { id: parseInt(wordId) },
+      });
+
+      if (!word) {
+        return res.status(404).json({ error: "Word not found" });
+      }
+
+      word.isSkipped = true;
+      await this.wordRepository.save(word);
+
+      res.json(word);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to skip word" });
     }
   }
 

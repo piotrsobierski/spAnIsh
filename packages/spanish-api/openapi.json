@@ -88,6 +88,114 @@
     }
   },
   "paths": {
+    "/ai/generate-examples": {
+      "post": {
+        "summary": "Generate example sentences for multiple words",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "words": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "targetLang": {
+                    "type": "string"
+                  },
+                  "sentencesPerWord": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Example sentences retrieved successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/ai/generate-related-words": {
+      "post": {
+        "summary": "Generate related words for a given word",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "word": {
+                    "type": "string"
+                  },
+                  "targetLang": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Related words retrieved successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/ai/generate-memory-associations": {
+      "post": {
+        "summary": "Generate memory association tips for a word",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "word": {
+                    "type": "string"
+                  },
+                  "targetLang": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Memory tips retrieved successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/words": {
       "get": {
         "responses": {
@@ -151,6 +259,30 @@
         "responses": {
           "200": {
             "description": "Answer saved successfully"
+          }
+        }
+      }
+    },
+    "/words/{wordId}/skip": {
+      "post": {
+        "summary": "Skip a word",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "wordId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the word to skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Word skipped successfully"
+          },
+          "404": {
+            "description": "Word not found"
           }
         }
       }

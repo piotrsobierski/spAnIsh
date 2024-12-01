@@ -19,6 +19,7 @@
     "test:api": "ts-node src/scripts/test-api.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
     "axios": "^1.6.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
