@@ -1,0 +1,54 @@
+name: Deploy React App
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - production
+          - staging
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/spanish-web/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: MAIN
+    defaults:
+      run:
+        working-directory: packages/spanish-web
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: packages/spanish-web/package-lock.json
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: false
+
+      - name: Deploy to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: packages/spanish-web/build/
+          server-dir: ./public_html/
+          dangerous-clean-slate: true
