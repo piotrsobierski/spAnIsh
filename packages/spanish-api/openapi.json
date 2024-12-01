@@ -40,6 +40,9 @@
           "goodAnswers": {
             "type": "integer"
           },
+          "goodAnswersStreak": {
+            "type": "integer"
+          },
           "badAnswers": {
             "type": "integer"
           },
@@ -88,80 +91,6 @@
     }
   },
   "paths": {
-    "/ai/generate-examples": {
-      "post": {
-        "summary": "Generate example sentences for multiple words",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "words": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "targetLang": {
-                    "type": "string"
-                  },
-                  "sentencesPerWord": {
-                    "type": "integer"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Example sentences retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "examples": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "word": {
-                            "type": "string"
-                          },
-                          "sentences": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "original": {
-                                  "type": "string"
-                                },
-                                "english": {
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      }
-    },
     "/ai/generate-related-words": {
       "post": {
         "summary": "Generate related words for a given word",
@@ -185,33 +114,7 @@
         },
         "responses": {
           "200": {
-            "description": "Related words retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "relatedWords": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "word": {
-                            "type": "string"
-                          },
-                          "translation": {
-                            "type": "string"
-                          },
-                          "relationship": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Related words retrieved successfully"
           },
           "400": {
             "description": "Invalid request"
@@ -245,30 +148,7 @@
         },
         "responses": {
           "200": {
-            "description": "Memory tips retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "tips": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "tip": {
-                            "type": "string"
-                          },
-                          "explanation": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Memory tips retrieved successfully"
           },
           "400": {
             "description": "Invalid request"
@@ -318,6 +198,56 @@
         }
       }
     },
+    "/words/not-learned-with-examples": {
+      "get": {
+        "summary": "Get not learned words with example sentences",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of words to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of not learned words with examples",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Word"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "example": {
+                            "type": "object",
+                            "properties": {
+                              "original": {
+                                "type": "string"
+                              },
+                              "english": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/words/answer": {
       "post": {
         "summary": "Save answer for a word",
@@ -346,30 +276,6 @@
         }
       }
     },
-    "/words/{wordId}/skip": {
-      "post": {
-        "summary": "Skip a word",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "wordId",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "ID of the word to skip"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Word skipped successfully"
-          },
-          "404": {
-            "description": "Word not found"
-          }
-        }
-      }
-    },
     "/words/{wordId}/stats": {
       "get": {
         "summary": "Get statistics for a word",
@@ -387,6 +293,30 @@
         "responses": {
           "200": {
             "description": "Word statistics"
+          },
+          "404": {
+            "description": "Word not found"
+          }
+        }
+      }
+    },
+    "/words/{wordId}/skip": {
+      "post": {
+        "summary": "Skip a word",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "wordId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the word to skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Word skipped successfully"
           },
           "404": {
             "description": "Word not found"

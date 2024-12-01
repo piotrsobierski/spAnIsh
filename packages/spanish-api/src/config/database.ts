@@ -14,7 +14,7 @@ const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true, //auto sync db schema
   dropSchema: false,
-  logging: process.env.NODE_ENV === "development",
+  logging: ["error"], // Only log errors
   entities: [Category, Word],
   migrations: [__dirname + "/../migrations/*.ts"],
   subscribers: [],

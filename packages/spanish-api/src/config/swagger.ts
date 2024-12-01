@@ -26,6 +26,7 @@ const options = {
             exampleTranslation: { type: "string", nullable: true },
             notes: { type: "string", nullable: true },
             goodAnswers: { type: "integer" },
+            goodAnswersStreak: { type: "integer" },
             badAnswers: { type: "integer" },
             lastAnswerTime: {
               type: "string",
