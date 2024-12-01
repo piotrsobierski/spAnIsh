@@ -24,7 +24,8 @@ import type {
 } from '@tanstack/react-query'
 import type {
   GetWordsNotLearnedParams,
-  PostAiGenerateExamplesBody,
+  GetWordsNotLearnedWithExamples200Item,
+  GetWordsNotLearnedWithExamplesParams,
   PostAiGenerateMemoryAssociationsBody,
   PostAiGenerateRelatedWordsBody,
   PostWordsAnswerBody,
@@ -34,65 +35,6 @@ import { customInstance } from '../mutator/custom-instance';
 
 
 
-/**
- * @summary Generate example sentences for multiple words
- */
-export const postAiGenerateExamples = (
-    postAiGenerateExamplesBody: PostAiGenerateExamplesBody,
- signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<void>(
-      {url: `/ai/generate-examples`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: postAiGenerateExamplesBody, signal
-    },
-      );
-    }
-  
-
-
-export const getPostAiGenerateExamplesMutationOptions = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAiGenerateExamples>>, {data: PostAiGenerateExamplesBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postAiGenerateExamples(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostAiGenerateExamplesMutationResult = NonNullable<Awaited<ReturnType<typeof postAiGenerateExamples>>>
-    export type PostAiGenerateExamplesMutationBody = PostAiGenerateExamplesBody
-    export type PostAiGenerateExamplesMutationError = void
-
-    /**
- * @summary Generate example sentences for multiple words
- */
-export const usePostAiGenerateExamples = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof postAiGenerateExamples>>,
-        TError,
-        {data: PostAiGenerateExamplesBody},
-        TContext
-      > => {
-
-      const mutationOptions = getPostAiGenerateExamplesMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 /**
  * @summary Generate related words for a given word
  */
@@ -383,6 +325,95 @@ export function useGetWordsNotLearned<TData = Awaited<ReturnType<typeof getWords
 
 
 /**
+ * @summary Get not learned words with example sentences
+ */
+export const getWordsNotLearnedWithExamples = (
+    params?: GetWordsNotLearnedWithExamplesParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetWordsNotLearnedWithExamples200Item[]>(
+      {url: `/words/not-learned-with-examples`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetWordsNotLearnedWithExamplesQueryKey = (params?: GetWordsNotLearnedWithExamplesParams,) => {
+    return [`/words/not-learned-with-examples`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetWordsNotLearnedWithExamplesQueryOptions = <TData = Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError = unknown>(params?: GetWordsNotLearnedWithExamplesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWordsNotLearnedWithExamplesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>> = ({ signal }) => getWordsNotLearnedWithExamples(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetWordsNotLearnedWithExamplesQueryResult = NonNullable<Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>>
+export type GetWordsNotLearnedWithExamplesQueryError = unknown
+
+
+export function useGetWordsNotLearnedWithExamples<TData = Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError = unknown>(
+ params: undefined |  GetWordsNotLearnedWithExamplesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetWordsNotLearnedWithExamples<TData = Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError = unknown>(
+ params?: GetWordsNotLearnedWithExamplesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetWordsNotLearnedWithExamples<TData = Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError = unknown>(
+ params?: GetWordsNotLearnedWithExamplesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get not learned words with example sentences
+ */
+
+export function useGetWordsNotLearnedWithExamples<TData = Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError = unknown>(
+ params?: GetWordsNotLearnedWithExamplesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsNotLearnedWithExamples>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetWordsNotLearnedWithExamplesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
  * @summary Save answer for a word
  */
 export const postWordsAnswer = (
@@ -437,63 +468,6 @@ export const usePostWordsAnswer = <TError = unknown,
       > => {
 
       const mutationOptions = getPostWordsAnswerMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-/**
- * @summary Skip a word
- */
-export const postWordsWordIdSkip = (
-    wordId: number,
- signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<void>(
-      {url: `/words/${wordId}/skip`, method: 'POST', signal
-    },
-      );
-    }
-  
-
-
-export const getPostWordsWordIdSkipMutationOptions = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWordsWordIdSkip>>, {wordId: number}> = (props) => {
-          const {wordId} = props ?? {};
-
-          return  postWordsWordIdSkip(wordId,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostWordsWordIdSkipMutationResult = NonNullable<Awaited<ReturnType<typeof postWordsWordIdSkip>>>
-    
-    export type PostWordsWordIdSkipMutationError = void
-
-    /**
- * @summary Skip a word
- */
-export const usePostWordsWordIdSkip = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof postWordsWordIdSkip>>,
-        TError,
-        {wordId: number},
-        TContext
-      > => {
-
-      const mutationOptions = getPostWordsWordIdSkipMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
@@ -586,3 +560,60 @@ export function useGetWordsWordIdStats<TData = Awaited<ReturnType<typeof getWord
 
 
 
+/**
+ * @summary Skip a word
+ */
+export const postWordsWordIdSkip = (
+    wordId: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/words/${wordId}/skip`, method: 'POST', signal
+    },
+      );
+    }
+  
+
+
+export const getPostWordsWordIdSkipMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWordsWordIdSkip>>, {wordId: number}> = (props) => {
+          const {wordId} = props ?? {};
+
+          return  postWordsWordIdSkip(wordId,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostWordsWordIdSkipMutationResult = NonNullable<Awaited<ReturnType<typeof postWordsWordIdSkip>>>
+    
+    export type PostWordsWordIdSkipMutationError = void
+
+    /**
+ * @summary Skip a word
+ */
+export const usePostWordsWordIdSkip = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postWordsWordIdSkip>>,
+        TError,
+        {wordId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getPostWordsWordIdSkipMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    

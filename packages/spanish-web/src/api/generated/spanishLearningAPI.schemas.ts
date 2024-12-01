@@ -10,6 +10,24 @@ export type PostWordsAnswerBody = {
   wordId?: number;
 };
 
+export type GetWordsNotLearnedWithExamples200ItemAllOfExample = {
+  english?: string;
+  original?: string;
+};
+
+export type GetWordsNotLearnedWithExamples200ItemAllOf = {
+  example?: GetWordsNotLearnedWithExamples200ItemAllOfExample;
+};
+
+export type GetWordsNotLearnedWithExamples200Item = Word & GetWordsNotLearnedWithExamples200ItemAllOf;
+
+export type GetWordsNotLearnedWithExamplesParams = {
+/**
+ * Number of words to return
+ */
+limit?: number;
+};
+
 export type GetWordsNotLearnedParams = {
 /**
  * Number of words to return
@@ -25,12 +43,6 @@ export type PostAiGenerateMemoryAssociationsBody = {
 export type PostAiGenerateRelatedWordsBody = {
   targetLang?: string;
   word?: string;
-};
-
-export type PostAiGenerateExamplesBody = {
-  sentencesPerWord?: number;
-  targetLang?: string;
-  words?: string[];
 };
 
 export interface WordStats {
@@ -54,6 +66,7 @@ export interface Word {
   /** @nullable */
   exampleTranslation?: string | null;
   goodAnswers?: number;
+  goodAnswersStreak?: number;
   id?: number;
   /** @nullable */
   lastAnswerTime?: string | null;
