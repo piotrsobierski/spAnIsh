@@ -4,6 +4,7 @@ import { Header } from "./components/Header";
 import "./App.css";
 import { WordsList } from "./components/WordsList";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import RainbowPrices from "./components/RainbowPrices";
 
 const theme = createTheme({
   // You can customize your theme here
@@ -21,6 +22,7 @@ function App() {
           {/* dsadas */}
           {/* Your other content goes here */}
           <WordsList />
+          <RainbowPrices />
         </div>
       </ThemeProvider>
     </QueryClientProvider>
