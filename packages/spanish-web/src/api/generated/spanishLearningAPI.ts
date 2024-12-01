@@ -24,6 +24,9 @@ import type {
 } from '@tanstack/react-query'
 import type {
   GetWordsNotLearnedParams,
+  PostAiGenerateExamplesBody,
+  PostAiGenerateMemoryAssociationsBody,
+  PostAiGenerateRelatedWordsBody,
   PostWordsAnswerBody,
   Word
 } from './spanishLearningAPI.schemas'
@@ -31,6 +34,183 @@ import { customInstance } from '../mutator/custom-instance';
 
 
 
+/**
+ * @summary Generate example sentences for multiple words
+ */
+export const postAiGenerateExamples = (
+    postAiGenerateExamplesBody: PostAiGenerateExamplesBody,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/ai/generate-examples`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postAiGenerateExamplesBody, signal
+    },
+      );
+    }
+  
+
+
+export const getPostAiGenerateExamplesMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAiGenerateExamples>>, {data: PostAiGenerateExamplesBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAiGenerateExamples(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAiGenerateExamplesMutationResult = NonNullable<Awaited<ReturnType<typeof postAiGenerateExamples>>>
+    export type PostAiGenerateExamplesMutationBody = PostAiGenerateExamplesBody
+    export type PostAiGenerateExamplesMutationError = void
+
+    /**
+ * @summary Generate example sentences for multiple words
+ */
+export const usePostAiGenerateExamples = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postAiGenerateExamples>>,
+        TError,
+        {data: PostAiGenerateExamplesBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostAiGenerateExamplesMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+/**
+ * @summary Generate related words for a given word
+ */
+export const postAiGenerateRelatedWords = (
+    postAiGenerateRelatedWordsBody: PostAiGenerateRelatedWordsBody,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/ai/generate-related-words`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postAiGenerateRelatedWordsBody, signal
+    },
+      );
+    }
+  
+
+
+export const getPostAiGenerateRelatedWordsMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateRelatedWords>>, TError,{data: PostAiGenerateRelatedWordsBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateRelatedWords>>, TError,{data: PostAiGenerateRelatedWordsBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAiGenerateRelatedWords>>, {data: PostAiGenerateRelatedWordsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAiGenerateRelatedWords(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAiGenerateRelatedWordsMutationResult = NonNullable<Awaited<ReturnType<typeof postAiGenerateRelatedWords>>>
+    export type PostAiGenerateRelatedWordsMutationBody = PostAiGenerateRelatedWordsBody
+    export type PostAiGenerateRelatedWordsMutationError = void
+
+    /**
+ * @summary Generate related words for a given word
+ */
+export const usePostAiGenerateRelatedWords = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateRelatedWords>>, TError,{data: PostAiGenerateRelatedWordsBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postAiGenerateRelatedWords>>,
+        TError,
+        {data: PostAiGenerateRelatedWordsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostAiGenerateRelatedWordsMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+/**
+ * @summary Generate memory association tips for a word
+ */
+export const postAiGenerateMemoryAssociations = (
+    postAiGenerateMemoryAssociationsBody: PostAiGenerateMemoryAssociationsBody,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/ai/generate-memory-associations`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postAiGenerateMemoryAssociationsBody, signal
+    },
+      );
+    }
+  
+
+
+export const getPostAiGenerateMemoryAssociationsMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateMemoryAssociations>>, TError,{data: PostAiGenerateMemoryAssociationsBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateMemoryAssociations>>, TError,{data: PostAiGenerateMemoryAssociationsBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAiGenerateMemoryAssociations>>, {data: PostAiGenerateMemoryAssociationsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAiGenerateMemoryAssociations(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAiGenerateMemoryAssociationsMutationResult = NonNullable<Awaited<ReturnType<typeof postAiGenerateMemoryAssociations>>>
+    export type PostAiGenerateMemoryAssociationsMutationBody = PostAiGenerateMemoryAssociationsBody
+    export type PostAiGenerateMemoryAssociationsMutationError = void
+
+    /**
+ * @summary Generate memory association tips for a word
+ */
+export const usePostAiGenerateMemoryAssociations = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateMemoryAssociations>>, TError,{data: PostAiGenerateMemoryAssociationsBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postAiGenerateMemoryAssociations>>,
+        TError,
+        {data: PostAiGenerateMemoryAssociationsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostAiGenerateMemoryAssociationsMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const getWords = (
     
  signal?: AbortSignal
@@ -257,6 +437,63 @@ export const usePostWordsAnswer = <TError = unknown,
       > => {
 
       const mutationOptions = getPostWordsAnswerMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+/**
+ * @summary Skip a word
+ */
+export const postWordsWordIdSkip = (
+    wordId: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/words/${wordId}/skip`, method: 'POST', signal
+    },
+      );
+    }
+  
+
+
+export const getPostWordsWordIdSkipMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWordsWordIdSkip>>, {wordId: number}> = (props) => {
+          const {wordId} = props ?? {};
+
+          return  postWordsWordIdSkip(wordId,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostWordsWordIdSkipMutationResult = NonNullable<Awaited<ReturnType<typeof postWordsWordIdSkip>>>
+    
+    export type PostWordsWordIdSkipMutationError = void
+
+    /**
+ * @summary Skip a word
+ */
+export const usePostWordsWordIdSkip = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdSkip>>, TError,{wordId: number}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postWordsWordIdSkip>>,
+        TError,
+        {wordId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getPostWordsWordIdSkipMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

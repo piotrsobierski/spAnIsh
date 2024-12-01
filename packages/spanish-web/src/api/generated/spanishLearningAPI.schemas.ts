@@ -17,6 +17,22 @@ export type GetWordsNotLearnedParams = {
 limit?: number;
 };
 
+export type PostAiGenerateMemoryAssociationsBody = {
+  targetLang?: string;
+  word?: string;
+};
+
+export type PostAiGenerateRelatedWordsBody = {
+  targetLang?: string;
+  word?: string;
+};
+
+export type PostAiGenerateExamplesBody = {
+  sentencesPerWord?: number;
+  targetLang?: string;
+  words?: string[];
+};
+
 export interface WordStats {
   badAnswers?: number;
   goodAnswers?: number;
