@@ -5,13 +5,13 @@ export interface BatchExamplesRequest {
 }
 
 export interface BatchExamplesResponse {
-  examples: {
+  examples: Array<{
     word: string;
-    sentences: {
+    sentences: Array<{
       original: string;
       english: string;
-    }[];
-  }[];
+    }>;
+  }>;
 }
 
 export interface WordRequest {
@@ -23,7 +23,7 @@ export interface RelatedWordsResponse {
   word: string;
   category: string;
   related_words: {
-    [key: string]: string;
+    [key: string]: string | undefined;
     english: string;
     explanation?: string;
   }[];

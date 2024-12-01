@@ -117,7 +117,41 @@
         },
         "responses": {
           "200": {
-            "description": "Example sentences retrieved successfully"
+            "description": "Example sentences retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "examples": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "word": {
+                            "type": "string"
+                          },
+                          "sentences": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "original": {
+                                  "type": "string"
+                                },
+                                "english": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid request"
@@ -151,7 +185,33 @@
         },
         "responses": {
           "200": {
-            "description": "Related words retrieved successfully"
+            "description": "Related words retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "relatedWords": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "word": {
+                            "type": "string"
+                          },
+                          "translation": {
+                            "type": "string"
+                          },
+                          "relationship": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid request"
@@ -185,7 +245,30 @@
         },
         "responses": {
           "200": {
-            "description": "Memory tips retrieved successfully"
+            "description": "Memory tips retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tips": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tip": {
+                            "type": "string"
+                          },
+                          "explanation": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid request"

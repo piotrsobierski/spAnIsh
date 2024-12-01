@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
-import AppDataSource from "../config/database";
-import { Word } from "../entities/Word";
-import { Between, IsNull, LessThan } from "typeorm";
+import { WordsService } from "../services/words.service";
 
 export class WordsController {
-  private wordRepository = AppDataSource.getRepository(Word);
+  constructor(private wordsService: WordsService) {}
 
   /**
    * @swagger
@@ -20,18 +18,15 @@ export class WordsController {
    *               items:
    *                 $ref: '#/components/schemas/Word'
    */
-  async getWords(req: Request, res: Response) {
+  getWords = async (req: Request, res: Response) => {
     try {
       const limit = parseInt(req.query.limit as string) || 10;
-      const words = await this.wordRepository.find({
-        take: limit,
-        relations: ["category"],
-      });
+      const words = await this.wordsService.findAll(limit);
       res.json(words);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch words" });
     }
-  }
+  };
 
   /**
    * @swagger
@@ -48,28 +43,15 @@ export class WordsController {
    *       200:
    *         description: List of not learned words
    */
-  async getNotLearnedWords(req: Request, res: Response) {
+  getNotLearnedWords = async (req: Request, res: Response) => {
     try {
       const limit = parseInt(req.query.limit as string) || 10;
-      const words = await this.wordRepository.find({
-        where: [
-          { lastAnswerTime: IsNull() }, // Never answered
-          { goodAnswersStreak: LessThan(3) }, // Less than 3 correct answers
-          { isSkipped: false }, // Skipped words
-          {
-            lastAnswerTime: LessThan(
-              new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-            ), // Not answered in last 7 days
-          },
-        ],
-        take: limit,
-        relations: ["category"],
-      });
+      const words = await this.wordsService.findNotLearned(limit);
       res.json(words);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch words" });
     }
-  }
+  };
 
   /**
    * @swagger
@@ -91,74 +73,18 @@ export class WordsController {
    *       200:
    *         description: Answer saved successfully
    */
-  async saveAnswer(req: Request, res: Response) {
+  saveAnswer = async (req: Request, res: Response) => {
     try {
       const { wordId, isCorrect } = req.body;
-
-      const word = await this.wordRepository.findOne({
-        where: { id: wordId },
-      });
-
-      if (!word) {
-        return res.status(404).json({ error: "Word not found" });
-      }
-
-      // Update answer counts
-      if (isCorrect) {
-        word.goodAnswers += 1;
-        word.goodAnswersStreak += 1;
-      } else {
-        word.badAnswers += 1;
-        word.goodAnswersStreak = 0;
-      }
-
-      word.lastAnswerTime = new Date();
-
-      await this.wordRepository.save(word);
+      const word = await this.wordsService.saveAnswer(wordId, isCorrect);
       res.json(word);
     } catch (error) {
+      if (error instanceof Error && error.message === "Word not found") {
+        return res.status(404).json({ error: "Word not found" });
+      }
       res.status(500).json({ error: "Failed to save answer" });
     }
-  }
-
-  /**
-   * @swagger
-   * /words/{wordId}/skip:
-   *   post:
-   *     summary: Skip a word
-   *     parameters:
-   *       - in: path
-   *         name: wordId
-   *         required: true
-   *         schema:
-   *           type: integer
-   *         description: ID of the word to skip
-   *     responses:
-   *       200:
-   *         description: Word skipped successfully
-   *       404:
-   *         description: Word not found
-   */
-  async skipWord(req: Request, res: Response) {
-    try {
-      const { wordId } = req.params;
-
-      const word = await this.wordRepository.findOne({
-        where: { id: parseInt(wordId) },
-      });
-
-      if (!word) {
-        return res.status(404).json({ error: "Word not found" });
-      }
-
-      word.isSkipped = true;
-      await this.wordRepository.save(word);
-
-      res.json(word);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to skip word" });
-    }
-  }
+  };
 
   /**
    * @swagger
@@ -178,36 +104,16 @@ export class WordsController {
    *       404:
    *         description: Word not found
    */
-  async getWordStats(req: Request, res: Response) {
+  getWordStats = async (req: Request, res: Response) => {
     try {
       const { wordId } = req.params;
-      const word = await this.wordRepository.findOne({
-        where: { id: parseInt(wordId) },
-        select: [
-          "id",
-          "word",
-          "translation",
-          "goodAnswers",
-          "badAnswers",
-          "lastAnswerTime",
-        ],
-      });
-
-      if (!word) {
+      const stats = await this.wordsService.getStats(parseInt(wordId));
+      res.json(stats);
+    } catch (error) {
+      if (error instanceof Error && error.message === "Word not found") {
         return res.status(404).json({ error: "Word not found" });
       }
-
-      const totalAnswers = word.goodAnswers + word.badAnswers;
-      const successRate =
-        totalAnswers > 0 ? (word.goodAnswers / totalAnswers) * 100 : 0;
-
-      res.json({
-        ...word,
-        totalAnswers,
-        successRate: Math.round(successRate * 100) / 100, // Round to 2 decimal places
-      });
-    } catch (error) {
       res.status(500).json({ error: "Failed to fetch word stats" });
     }
-  }
+  };
 }
