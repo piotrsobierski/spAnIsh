@@ -1,14 +1,10 @@
-import React from "react";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { Header } from "./components/Header";
 import "./App.css";
 import { WordsList } from "./components/WordsList";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RainbowPrices from "./components/RainbowPrices";
 
-const theme = createTheme({
-  // You can customize your theme here
-});
+const theme = createTheme({});
 
 const queryClient = new QueryClient();
 
@@ -18,11 +14,9 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="App">
-          {/* <Header /> */}
-          {/* dsadas */}
-          {/* Your other content goes here */}
-          <WordsList />
           <RainbowPrices />
+
+          <WordsList />
         </div>
       </ThemeProvider>
     </QueryClientProvider>
