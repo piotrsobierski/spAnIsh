@@ -9,6 +9,27 @@ interface ApiError {
 
 async function testApi() {
   try {
+    // Test Anthropic AI endpoints
+    console.log("\nTesting AI memory associations:");
+    const memoryAssociations = await axios.post(
+      `${API_URL}/ai/generate-memory-associations`,
+      {
+        targetLang: "es",
+        word: "gato",
+      }
+    );
+    console.log("Memory associations response:", memoryAssociations.data);
+
+    console.log("\nTesting AI related words:");
+    const relatedWords = await axios.post(
+      `${API_URL}/ai/generate-related-words`,
+      {
+        targetLang: "es",
+        word: "gato",
+      }
+    );
+    console.log("Related words response:", relatedWords.data);
+
     // Get words
     console.log("\nGetting 5 words:");
     const words = await axios.get(`${API_URL}/words?limit=5`);
