@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { Word } from "../entities/Word";
 import { IsNull, LessThan } from "typeorm";
 import { AIService } from "../services/ai.service";
+import { shuffleArray } from "../helpers/array.helper";
 
 type WordWithExample = Word & {
   aiExample: { original: string; english: string } | null;
@@ -91,6 +92,16 @@ export class WordsService {
     return this.wordRepository.save(word);
   }
 
+  async forceSetStreak(wordId: number, streak: number): Promise<Word> {
+    const word = await this.wordRepository.findOneBy({ id: wordId });
+    if (!word) {
+      throw new Error("Word not found");
+    }
+
+    word.goodAnswersStreak = streak;
+    return this.wordRepository.save(word);
+  }
+
   async findNotLearnedWithExamples(limit: number = 10): Promise<Word[]> {
     const words = await this.findNotLearned(limit);
 
@@ -121,6 +132,78 @@ export class WordsService {
         // Save all updated words
         await this.wordRepository.save(wordsNeedingExamples);
         console.log("saving words", wordsNeedingExamples);
+      } catch (error) {
+        console.error("Failed to get examples:", error);
+      }
+    }
+
+    return words;
+  }
+
+  async getLearningStats() {
+    const [totalWords, learnedWords, skippedWords] = await Promise.all([
+      this.wordRepository.count(),
+      this.wordRepository.count({
+        where: { goodAnswersStreak: 3 },
+      }),
+      this.wordRepository.count({
+        where: { isSkipped: true },
+      }),
+    ]);
+
+    return {
+      totalWords,
+      learnedWords,
+      skippedWords,
+    };
+  }
+
+  async findRandomNotLearned(
+    limit: number = 10,
+    poolSize: number = 50
+  ): Promise<Word[]> {
+    // Fetch poolSize number of not learned words
+    const wordsPool = await this.wordRepository.find({
+      where: [
+        {
+          goodAnswersStreak: LessThan(3),
+          isSkipped: false,
+        },
+      ],
+      take: poolSize,
+      relations: ["category"],
+    });
+
+    // Shuffle and take the requested number
+    return shuffleArray(wordsPool).slice(0, Math.min(limit, wordsPool.length));
+  }
+
+  async findRandomNotLearnedWithExamples(
+    limit: number = 10,
+    poolSize: number = 50
+  ): Promise<Word[]> {
+    const words = await this.findRandomNotLearned(limit, poolSize);
+
+    // Filter words that need examples
+    const wordsNeedingExamples = words.filter(
+      (word) => !word.example || !word.exampleTranslation
+    );
+
+    if (wordsNeedingExamples.length > 0) {
+      try {
+        const examples = await this.aiService.generateExamples(
+          wordsNeedingExamples.map((w) => w.word),
+          "Spanish",
+          1
+        );
+
+        wordsNeedingExamples.forEach((word, index) => {
+          word.example = examples.examples[index]?.sentences[0]?.original || "";
+          word.exampleTranslation =
+            examples.examples[index]?.sentences[0]?.english || "";
+        });
+
+        await this.wordRepository.save(wordsNeedingExamples);
       } catch (error) {
         console.error("Failed to get examples:", error);
       }

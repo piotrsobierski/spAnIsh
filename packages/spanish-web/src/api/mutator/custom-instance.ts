@@ -1,7 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 export const AXIOS_INSTANCE = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: "https://sobierski.com/api",
+  // process.env.NODE_ENV === "production"
+  //   ? "https://sobierski.com/api"
+  //   : "http://localhost:3001/api",
 });
 
 interface CustomRequestConfig extends AxiosRequestConfig {

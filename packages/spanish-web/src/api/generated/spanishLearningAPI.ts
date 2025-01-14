@@ -23,18 +23,82 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query'
 import type {
+  GetWordsLearningStats200,
   GetWordsNotLearnedParams,
   GetWordsNotLearnedWithExamples200Item,
   GetWordsNotLearnedWithExamplesParams,
+  GetWordsRandomNotLearnedWithExamples200Item,
+  GetWordsRandomNotLearnedWithExamplesParams,
+  PostAiGenerateExamplesBody,
   PostAiGenerateMemoryAssociationsBody,
   PostAiGenerateRelatedWordsBody,
   PostWordsAnswerBody,
+  PostWordsWordIdStreakBody,
   Word
 } from './spanishLearningAPI.schemas'
 import { customInstance } from '../mutator/custom-instance';
 
 
 
+/**
+ * @summary Generate example sentences for given words
+ */
+export const postAiGenerateExamples = (
+    postAiGenerateExamplesBody: PostAiGenerateExamplesBody,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/ai/generate-examples`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postAiGenerateExamplesBody, signal
+    },
+      );
+    }
+  
+
+
+export const getPostAiGenerateExamplesMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAiGenerateExamples>>, {data: PostAiGenerateExamplesBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAiGenerateExamples(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAiGenerateExamplesMutationResult = NonNullable<Awaited<ReturnType<typeof postAiGenerateExamples>>>
+    export type PostAiGenerateExamplesMutationBody = PostAiGenerateExamplesBody
+    export type PostAiGenerateExamplesMutationError = void
+
+    /**
+ * @summary Generate example sentences for given words
+ */
+export const usePostAiGenerateExamples = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAiGenerateExamples>>, TError,{data: PostAiGenerateExamplesBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postAiGenerateExamples>>,
+        TError,
+        {data: PostAiGenerateExamplesBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostAiGenerateExamplesMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 /**
  * @summary Generate related words for a given word
  */
@@ -617,3 +681,240 @@ export const usePostWordsWordIdSkip = <TError = void,
       return useMutation(mutationOptions);
     }
     
+/**
+ * @summary Force set streak for a word
+ */
+export const postWordsWordIdStreak = (
+    wordId: number,
+    postWordsWordIdStreakBody: PostWordsWordIdStreakBody,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/words/${wordId}/streak`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postWordsWordIdStreakBody, signal
+    },
+      );
+    }
+  
+
+
+export const getPostWordsWordIdStreakMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdStreak>>, TError,{wordId: number;data: PostWordsWordIdStreakBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdStreak>>, TError,{wordId: number;data: PostWordsWordIdStreakBody}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWordsWordIdStreak>>, {wordId: number;data: PostWordsWordIdStreakBody}> = (props) => {
+          const {wordId,data} = props ?? {};
+
+          return  postWordsWordIdStreak(wordId,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostWordsWordIdStreakMutationResult = NonNullable<Awaited<ReturnType<typeof postWordsWordIdStreak>>>
+    export type PostWordsWordIdStreakMutationBody = PostWordsWordIdStreakBody
+    export type PostWordsWordIdStreakMutationError = unknown
+
+    /**
+ * @summary Force set streak for a word
+ */
+export const usePostWordsWordIdStreak = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWordsWordIdStreak>>, TError,{wordId: number;data: PostWordsWordIdStreakBody}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postWordsWordIdStreak>>,
+        TError,
+        {wordId: number;data: PostWordsWordIdStreakBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostWordsWordIdStreakMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+/**
+ * @summary Get learning statistics
+ */
+export const getWordsLearningStats = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetWordsLearningStats200>(
+      {url: `/words/learning-stats`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetWordsLearningStatsQueryKey = () => {
+    return [`/words/learning-stats`] as const;
+    }
+
+    
+export const getGetWordsLearningStatsQueryOptions = <TData = Awaited<ReturnType<typeof getWordsLearningStats>>, TError = void>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsLearningStats>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWordsLearningStatsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWordsLearningStats>>> = ({ signal }) => getWordsLearningStats(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWordsLearningStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetWordsLearningStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getWordsLearningStats>>>
+export type GetWordsLearningStatsQueryError = void
+
+
+export function useGetWordsLearningStats<TData = Awaited<ReturnType<typeof getWordsLearningStats>>, TError = void>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsLearningStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWordsLearningStats>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetWordsLearningStats<TData = Awaited<ReturnType<typeof getWordsLearningStats>>, TError = void>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsLearningStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWordsLearningStats>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetWordsLearningStats<TData = Awaited<ReturnType<typeof getWordsLearningStats>>, TError = void>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsLearningStats>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get learning statistics
+ */
+
+export function useGetWordsLearningStats<TData = Awaited<ReturnType<typeof getWordsLearningStats>>, TError = void>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsLearningStats>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetWordsLearningStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * @summary Get random not learned words with example sentences
+ */
+export const getWordsRandomNotLearnedWithExamples = (
+    params?: GetWordsRandomNotLearnedWithExamplesParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetWordsRandomNotLearnedWithExamples200Item[]>(
+      {url: `/words/random-not-learned-with-examples`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetWordsRandomNotLearnedWithExamplesQueryKey = (params?: GetWordsRandomNotLearnedWithExamplesParams,) => {
+    return [`/words/random-not-learned-with-examples`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetWordsRandomNotLearnedWithExamplesQueryOptions = <TData = Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError = unknown>(params?: GetWordsRandomNotLearnedWithExamplesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWordsRandomNotLearnedWithExamplesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>> = ({ signal }) => getWordsRandomNotLearnedWithExamples(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetWordsRandomNotLearnedWithExamplesQueryResult = NonNullable<Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>>
+export type GetWordsRandomNotLearnedWithExamplesQueryError = unknown
+
+
+export function useGetWordsRandomNotLearnedWithExamples<TData = Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError = unknown>(
+ params: undefined |  GetWordsRandomNotLearnedWithExamplesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetWordsRandomNotLearnedWithExamples<TData = Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError = unknown>(
+ params?: GetWordsRandomNotLearnedWithExamplesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetWordsRandomNotLearnedWithExamples<TData = Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError = unknown>(
+ params?: GetWordsRandomNotLearnedWithExamplesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get random not learned words with example sentences
+ */
+
+export function useGetWordsRandomNotLearnedWithExamples<TData = Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError = unknown>(
+ params?: GetWordsRandomNotLearnedWithExamplesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWordsRandomNotLearnedWithExamples>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetWordsRandomNotLearnedWithExamplesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+

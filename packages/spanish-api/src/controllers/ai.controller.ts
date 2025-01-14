@@ -4,7 +4,36 @@ import { BatchExamplesRequest, WordRequest } from "../types/ai.types";
 
 export class AIController {
   constructor(private aiService: AIService) {}
-
+  /**
+   * @swagger
+   * /ai/generate-examples:
+   *   post:
+   *     summary: Generate example sentences for given words
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               words:
+   *                 type: array
+   *                 items:
+   *                   type: string
+   *               targetLang:
+   *                 type: string
+   *                 default: Spanish
+   *               sentencesPerWord:
+   *                 type: number
+   *                 default: 3
+   *     responses:
+   *       200:
+   *         description: Example sentences generated successfully
+   *       400:
+   *         description: Invalid request - words array is required
+   *       500:
+   *         description: Server error
+   */
   generateExampleSentences = async (
     req: Request<{}, {}, BatchExamplesRequest>,
     res: Response

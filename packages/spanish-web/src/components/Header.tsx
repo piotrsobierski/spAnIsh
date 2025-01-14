@@ -9,7 +9,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
 }));
 
-const StyledTypography = styled(Typography)(({ theme }) => ({
+const StyledTypography = styled(Typography)(({}) => ({
   fontWeight: 600,
   fontSize: "1.75rem",
   background: "linear-gradient(45deg, #2C3E50, #5B3A50)",

@@ -1,14 +1,51 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
 
 interface FlightPrice {
-  Key: string;
-  Price: number;
+  Klucz: string;
+  Cena: number;
 }
 
 interface FlightResponse {
-  Destinations: FlightPrice[];
+  Destynacje: FlightPrice[];
 }
+
+const Container = styled.div`
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const PriceGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+`;
+
+const PriceCard = styled.div<{ highlight: boolean }>`
+  padding: 15px;
+  border-radius: 8px;
+  background: ${(props) => (props.highlight ? "#ffe4e4" : "#f5f5f5")};
+  border: ${(props) => (props.highlight ? "2px solid #ff4444" : "none")};
+  transition: transform 0.2s;
+  &:hover {
+    transform: translateY(-5px);
+  }
+`;
+
+const Price = styled.p`
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+`;
+
+const Error = styled.div`
+  color: #ff4444;
+  padding: 20px;
+  text-align: center;
+`;
 
 const RainbowPrices: React.FC = () => {
   const [prices, setPrices] = useState<FlightPrice[]>([]);
@@ -37,8 +74,8 @@ const RainbowPrices: React.FC = () => {
 
       setPrices(
         response.data.Destynacje.map((item) => ({
-          Key: item.Klucz,
-          Price: item.Cena,
+          Klucz: item.Klucz,
+          Cena: item.Cena,
         }))
       );
       setLoading(false);
@@ -55,65 +92,20 @@ const RainbowPrices: React.FC = () => {
   }, []);
 
   if (loading) return <div>Loading prices...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (error) return <Error>{error}</Error>;
 
   return (
-    <div className="rainbow-prices">
+    <Container>
       <h2>Flight Prices: Dominican Republic → Poland</h2>
-      <div className="price-grid">
-        {prices.map((price, index) => (
-          <div
-            key={price.Key}
-            className={`price-card ${price.Price < 2000 ? "highlight" : ""}`}
-          >
-            <h3>{price.Key}</h3>
-            <p className="price">{price.Price} PLN</p>
-          </div>
+      <PriceGrid>
+        {prices.map((price) => (
+          <PriceCard key={price.Klucz} highlight={price.Cena < 2000}>
+            <h3>{price.Klucz}</h3>
+            <Price>{price.Cena} PLN</Price>
+          </PriceCard>
         ))}
-      </div>
-      <style jsx>{`
-        .rainbow-prices {
-          padding: 20px;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .price-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-          gap: 20px;
-          margin-top: 20px;
-        }
-
-        .price-card {
-          padding: 15px;
-          border-radius: 8px;
-          background: #f5f5f5;
-          transition: transform 0.2s;
-        }
-
-        .price-card:hover {
-          transform: translateY(-5px);
-        }
-
-        .price-card.highlight {
-          background: #ffe4e4;
-          border: 2px solid #ff4444;
-        }
-
-        .price {
-          font-size: 24px;
-          font-weight: bold;
-          color: #2c3e50;
-        }
-
-        .error {
-          color: #ff4444;
-          padding: 20px;
-          text-align: center;
-        }
-      `}</style>
-    </div>
+      </PriceGrid>
+    </Container>
   );
 };
 

@@ -17,6 +17,9 @@ router.get("/", wordsController.getWords);
 // Get not learned words
 router.get("/not-learned", wordsController.getNotLearnedWords);
 
+// Add the new learning stats route (add this before other routes)
+router.get("/learning-stats", wordsController.getLearningStats);
+
 // Save answer for a word
 router.post("/answer", wordsController.saveAnswer);
 
@@ -30,6 +33,12 @@ router.post("/:wordId/skip", wordsController.skipWord);
 router.get(
   "/not-learned-with-examples",
   wordsController.getNotLearnedWordsWithExamples
+);
+
+// Add this route with the other routes
+router.get(
+  "/random-not-learned-with-examples",
+  wordsController.getRandomNotLearnedWordsWithExamples
 );
 
 export default router;

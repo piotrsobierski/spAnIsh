@@ -192,4 +192,132 @@ export class WordsController {
       res.status(500).json({ error: "Failed to skip word" });
     }
   };
+
+  /**
+   * @swagger
+   * /words/{wordId}/streak:
+   *   post:
+   *     summary: Force set streak for a word
+   *     parameters:
+   *       - in: path
+   *         name: wordId
+   *         required: true
+   *         schema:
+   *           type: integer
+   *         description: ID of the word
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               streak:
+   *                 type: integer
+   *                 description: Streak to set
+   */
+  forceSetStreak = async (req: Request, res: Response) => {
+    try {
+      const { wordId } = req.params;
+      const { streak } = req.body;
+      const word = await this.wordsService.forceSetStreak(
+        parseInt(wordId),
+        streak
+      );
+      res.json(word);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to force set streak" });
+    }
+  };
+
+  /**
+   * @swagger
+   * /words/learning-stats:
+   *   get:
+   *     summary: Get learning statistics
+   *     responses:
+   *       200:
+   *         description: Learning statistics
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 totalWords:
+   *                   type: integer
+   *                   description: Total number of words in the system
+   *                 learnedWords:
+   *                   type: integer
+   *                   description: Number of words marked as learned
+   *                 skippedWords:
+   *                   type: integer
+   *                   description: Number of words marked as skipped
+   *       500:
+   *         description: Failed to fetch learning stats
+   */
+  getLearningStats = async (req: Request, res: Response) => {
+    try {
+      const stats = await this.wordsService.getLearningStats();
+      res.json(stats);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch learning stats" });
+    }
+  };
+
+  /**
+   * @swagger
+   * /words/random-not-learned-with-examples:
+   *   get:
+   *     summary: Get random not learned words with example sentences
+   *     parameters:
+   *       - in: query
+   *         name: limit
+   *         schema:
+   *           type: integer
+   *         description: Number of words to return
+   *       - in: query
+   *         name: poolSize
+   *         schema:
+   *           type: integer
+   *         description: Size of the pool to randomly select from
+   *     responses:
+   *       200:
+   *         description: List of random not learned words with examples
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 allOf:
+   *                   - $ref: '#/components/schemas/Word'
+   *                   - type: object
+   *                     properties:
+   *                       example:
+   *                         type: object
+   *                         properties:
+   *                           original:
+   *                             type: string
+   *                           english:
+   *                             type: string
+   */
+  getRandomNotLearnedWordsWithExamples = async (
+    req: Request,
+    res: Response
+  ) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const poolSize = parseInt(req.query.poolSize as string) || 50;
+      const words = await this.wordsService.findRandomNotLearnedWithExamples(
+        limit,
+        poolSize
+      );
+      res.json(words);
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({
+        error: "Failed to fetch random words with examples",
+        details: error instanceof Error ? error.message : undefined,
+      });
+    }
+  };
 }

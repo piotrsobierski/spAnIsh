@@ -1,8 +1,15 @@
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import {
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+  Container,
+} from "@mui/material";
 import "./App.css";
 import { WordsList } from "./components/WordsList";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RainbowPrices from "./components/RainbowPrices";
+import { LearningStatistics } from "./components/LearningStatistics";
+import { PexelApi } from "./components/PexelApi";
 
 const theme = createTheme({});
 
@@ -15,8 +22,11 @@ function App() {
         <CssBaseline />
         <div className="App">
           <RainbowPrices />
-
-          <WordsList />
+          <Container maxWidth="lg">
+            <LearningStatistics />
+            <WordsList />
+            <PexelApi />
+          </Container>
         </div>
       </ThemeProvider>
     </QueryClientProvider>

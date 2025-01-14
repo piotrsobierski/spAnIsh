@@ -5,6 +5,42 @@
  * API for learning Spanish vocabulary
  * OpenAPI spec version: 1.0.0
  */
+export type GetWordsRandomNotLearnedWithExamples200ItemAllOfExample = {
+  english?: string;
+  original?: string;
+};
+
+export type GetWordsRandomNotLearnedWithExamples200ItemAllOf = {
+  example?: GetWordsRandomNotLearnedWithExamples200ItemAllOfExample;
+};
+
+export type GetWordsRandomNotLearnedWithExamples200Item = Word & GetWordsRandomNotLearnedWithExamples200ItemAllOf;
+
+export type GetWordsRandomNotLearnedWithExamplesParams = {
+/**
+ * Number of words to return
+ */
+limit?: number;
+/**
+ * Size of the pool to randomly select from
+ */
+poolSize?: number;
+};
+
+export type GetWordsLearningStats200 = {
+  /** Number of words marked as learned */
+  learnedWords?: number;
+  /** Number of words marked as skipped */
+  skippedWords?: number;
+  /** Total number of words in the system */
+  totalWords?: number;
+};
+
+export type PostWordsWordIdStreakBody = {
+  /** Streak to set */
+  streak?: number;
+};
+
 export type PostWordsAnswerBody = {
   isCorrect?: boolean;
   wordId?: number;
@@ -43,6 +79,12 @@ export type PostAiGenerateMemoryAssociationsBody = {
 export type PostAiGenerateRelatedWordsBody = {
   targetLang?: string;
   word?: string;
+};
+
+export type PostAiGenerateExamplesBody = {
+  sentencesPerWord?: number;
+  targetLang?: string;
+  words?: string[];
 };
 
 export interface WordStats {
